@@ -1,6 +1,7 @@
 import Layout from '../../components/layout'
 // import Title from Title
 import Head  from 'next/head'
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 
 import utilStyles from '../../styles/utils.module.css'
 import { getAllPostIds, getPostData } from '../../lib/posts'
@@ -8,8 +9,9 @@ import Date from '../../components/date'
 
 // params is from the url args so id is from this 
 // file name: [id].js - 
-export async function getStaticProps({ params }) {
-  const postData = await getPostData(params.id)
+export const getStaticProps: GetStaticProps = async ({params}) => {
+// export const async function getStaticProps({ params }) {
+  const postData = await getPostData(params.id as string)
   return {
     props: {
       postData
@@ -17,7 +19,8 @@ export async function getStaticProps({ params }) {
   }
 }
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
+// export async function getStaticPaths() {
   const paths = getAllPostIds()
   console.log(paths)
   return {
@@ -26,7 +29,8 @@ export async function getStaticPaths() {
   }
 }
 
-export function Paths() {
+// TBD: Is this return object correct? it does build.
+export function Paths() : React.ReactElement {
   // fails as tries to read from filesystem. 
   // -> can only ab run at build time
   // const paths = getStaticPaths()
@@ -49,7 +53,15 @@ export function Paths() {
   )
 }
 
-export default function Post({postData}) {
+export default function Post({
+  postData
+}: { 
+  postData: {
+    title: string
+    date: string
+    contentHtml: string
+  }}
+  ) {
   return (
     <Layout>
         <Head>
