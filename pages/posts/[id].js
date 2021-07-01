@@ -19,10 +19,34 @@ export async function getStaticProps({ params }) {
 
 export async function getStaticPaths() {
   const paths = getAllPostIds()
+  console.log(paths)
   return {
     paths,
     fallback: false
   }
+}
+
+export function Paths() {
+  // fails as tries to read from filesystem. 
+  // -> can only ab run at build time
+  // const paths = getStaticPaths()
+
+  const fileNames = ['hi.md', 'other.md']
+  const paths = fileNames.map(fileName => {
+    return {
+      params: {
+        id: fileName.replace(/\.md$/, '')
+      }
+    }
+  });
+  console.log(paths)
+  return (
+    <>
+      {paths.map(({ params }) => (
+        <li>{params.id}</li>
+      ))}
+    </>
+  )
 }
 
 export default function Post({postData}) {
@@ -33,6 +57,9 @@ export default function Post({postData}) {
             {postData.title}
         </title>
         </Head>
+        <p>
+            <Paths/>
+        </p>
         <article>
             <h1 className={utilStyles.headingXl}>{postData.title}</h1>
             <div className={utilStyles.lightText}>
