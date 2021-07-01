@@ -58,7 +58,9 @@ export default function Post({postData}) {
         </title>
         </Head>
         <p>
+          <ul>
             <Paths/>
+          </ul>
         </p>
         <article>
             <h1 className={utilStyles.headingXl}>{postData.title}</h1>
